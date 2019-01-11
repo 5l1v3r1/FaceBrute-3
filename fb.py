@@ -139,6 +139,7 @@ def singlefbbrute():
                 print ('')
                 print(C+' ['+W+' Result '+C+']'+R+' > '+G+'Success')
                 print(C+' ['+W+' Password '+C+']'+R+' > '+W+password)
+                main()
 
 def multifbbrute():
     URL = 'https://m.facebook.com/login'
