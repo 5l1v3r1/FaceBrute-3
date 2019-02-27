@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# Gausah pake acara Recode Recode segala ya Kontol
 
 import requests , time , os , random
 from bs4 import BeautifulSoup
