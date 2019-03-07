@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import requests , time , os , random
+import requests , time , os , random , string
 from bs4 import BeautifulSoup
 
 W  = '\033[0m'  # white (default)
@@ -18,7 +18,7 @@ def banner():
     print ('')
     print (B+'███████'+W+'▄▄███████████▄')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╔═╗┌─┐┌─┐┌─┐')
-    print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╠╣ ├─┤│  ├┤ '+O+'    V.3.0')
+    print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╠╣ ├─┤│  ├┤ '+O+'    V.3.5')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'    ╚  ┴ ┴└─┘└─┘')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'        ╔╗ ┬─┐┬ ┬┌┬┐┌─┐')
     print (B+'▓▓▓▓▓▓█'+W+'              █'+G+'        ╠╩╗├┬┘│ │ │ ├┤ ')
@@ -33,6 +33,8 @@ def banner():
     print (C+' 01'+R+'        :'+W+' Brute Single Target with Wordlist')
     print (C+' 02'+R+'        :'+W+' Brute Multiple Target with Single Password')
     print (C+' 03'+R+'        :'+W+' Brute Multiple Target with Wordlist')
+    print ('')
+    print (C+' 00'+R+'        :'+W+' Generate Random UID List')
     print ('')
 ua = [
    #Chrome
@@ -199,6 +201,14 @@ def multibrute():
                     print(C+' ['+G+' OK '+C+']'+R+' > '+W+password,end='', flush=True)
         print ('')
 
+def randid():
+    print ('')
+    print (C+' ['+G+' * '+C+']'+O+' Generating Facebook UID ...')
+    print (W+'')
+    os.system('php id.php')
+    print ('')
+    print (C+' ['+G+' * '+C+']'+O+' Done !!')
+
 def main():
     print ('')
     cmd = str(input(R+' > '+W))
@@ -210,6 +220,9 @@ def main():
         main()
     elif cmd == '03' or cmd == '3':
         multibrute()
+        main()
+    elif cmd == '00' or cmd == '0':
+        randid()
         main()
     elif cmd == 'clear':
         banner()
